@@ -1,0 +1,5 @@
+import:
+  - module: "${WORKTREE_NAME}"
+    path: "${WORKTREE_DIR}/.venv/bin/python"
+    type: "PYTHON"
+

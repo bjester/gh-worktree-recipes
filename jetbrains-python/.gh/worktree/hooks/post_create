@@ -1,0 +1,52 @@
+#!/bin/bash
+
+set -e
+
+WORKTREE_NAME="$1"
+BASE_REF="$2"
+
+GIT_REPO="$(basename $(git remote get-url origin) .git)"
+
+pushd "$WORKTREE_NAME"
+
+# check for defaults from the codebase just checked out
+if [ -e "runtime.txt" ]; then
+    DEFAULT_PY_VERSION=$(cat runtime.txt | sed '/^#/d' | egrep -o "[0-9\.]+")
+elif [ -e ".python-version" ]; then
+    DEFAULT_PY_VERSION=$(cat .python-version)
+fi
+
+# define versions, venv name
+PY_VENV_NAME="${GIT_REPO}.${NEW_BRANCH}"
+PY_VERSION=${3:-"${DEFAULT_PY_VERSION}"}
+
+echo "USING: python@$PY_VERSION"
+
+uv venv --seed -p "$PY_VERSION"
+
+source .venv/bin/activate 
+
+if [[ -z "$PY_VERSION" ]]; then
+    PY_VERSION="$(python --version | cut -d ' ' -f 2)"
+fi
+
+if [ -e "uv.lock" ]; then
+    uv sync --dev
+else
+  pip install -r requirements.txt
+  pip install -e .
+fi
+
+pre-commit install
+
+# add python version to the .envrc file
+cat << EOF >> .envrc
+export PYTHON_VERSION="${PY_VERSION}"
+
+EOF
+
+direnv allow
+
+# move template to be names as the worktree name
+mv project.iml "${WORKTREE_NAME}.iml"
+

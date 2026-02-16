@@ -1,0 +1,3 @@
+# Jetbrains IDE Recipe for a Python project
+
+This is a basic recipe for hooks and templates, for `gh-worktree`, when using Jetbrains IDEs. It uses the [SDK-Import](https://plugins.jetbrains.com/plugin/24223-sdk-import) IDE plugin to automatically configure the project's Python SDK with the virtualenv that was created in the hooks. Once the worktree is created, you simply use _File_ > _Open_ to open the worktree directory, and the IDE will detect it as a project. Use _Tools_ > _Reimport SDK_ if the Python SDK is not picked up immediately.
