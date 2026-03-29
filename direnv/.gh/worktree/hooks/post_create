@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e
+
+WORKTREE_NAME="$1"
+BASE_REF="$2"
+WORKTREE_NAME_NORMALIZED="$3"
+
+# add more things to the .envrc file at hook runtime-- this runs *after* templates
+if [[ "$WORKTREE_NAME" == test* ]]; then
+cat << EOF >> .envrc
+export INTEGRATION_TESTING="1"
+
+EOF
+fi
+
+direnv allow

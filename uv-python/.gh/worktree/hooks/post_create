@@ -18,18 +18,13 @@ elif [ -e ".python-version" ]; then
 fi
 
 # define versions, venv name
-PY_VENV_NAME="${GIT_REPO}.${NEW_BRANCH}"
 PY_VERSION=${DEFAULT_PY_VERSION:-"3.10"}
 
 echo "USING: python@$PY_VERSION"
 
 uv venv --seed -p "$PY_VERSION"
 
-source .venv/bin/activate 
-
-if [[ -z "$PY_VERSION" ]]; then
-    PY_VERSION="$(python --version | cut -d ' ' -f 2)"
-fi
+source .venv/bin/activate
 
 if [ -e "uv.lock" ]; then
     uv sync --dev
@@ -37,17 +32,3 @@ else
   uv pip install -r requirements.txt
   uv pip install -e .
 fi
-
-pre-commit install
-
-# add python version to the .envrc file
-cat << EOF >> .envrc
-export PYTHON_VERSION="${PY_VERSION}"
-
-EOF
-
-direnv allow
-
-# move template to be names as the worktree name
-mv project.iml "${WORKTREE_NAME_NORMALIZED}.iml"
-
