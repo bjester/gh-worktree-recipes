@@ -1,3 +1,5 @@
+INTEGRATION TEST
+
 # treefort-recipes
 My hooks and templates for [`treefort`](https://github.com/bjester/treefort) CLI tool.
 
