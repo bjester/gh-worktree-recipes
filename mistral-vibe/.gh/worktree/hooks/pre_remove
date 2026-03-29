@@ -1,0 +1,36 @@
+#!/bin/bash
+
+WORKTREE_NAME="$1"
+SESSION_DIR="$HOME/.vibe/logs/session"
+
+vibe-id() {
+    local current_pwd="$(realpath "$1")"
+
+    # 1. Find all meta.json files
+    # 2. Filter for those matching the current working directory
+    # 3. Sort by modification time (most recent first)
+    # 4. Extract the folder name
+    local latest_session_path=$(grep -l "\"working_directory\": \"$current_pwd\"" "$SESSION_DIR"/*/meta.json 2>/dev/null | xargs -r ls -t 2>/dev/null | head -n 1)
+
+    if [ -n "$latest_session_path" ]; then
+        # Extract the ID (the part after the last underscore in the directory name)
+        # Directory: .../session_20260328_193026_4bb22087/meta.json
+        local folder_name=$(basename "$(dirname "$latest_session_path")")
+        local session_id="${folder_name##*_}"
+        echo "$session_id"
+    fi
+}
+
+vibe-cleanup() {
+    local session_id=$(vibe-id "$1")
+
+    if [ -n "$session_id" ]; then
+        echo "Cleaning up session $session_id for $1."
+        find $SESSION_DIR -maxdepth 1 -type d -name "*_$session_id" -exec rm -rf '{}' \;
+        echo "Done!"
+    else
+        echo "No existing Vibe session found for this directory."
+    fi
+}
+
+vibe-cleanup "$WORKTREE_NAME"

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+WORKTREE_NAME="$1"
+
+pushd "$WORKTREE_NAME"
+
+# remove any containers and volumes
+docker compose down -v
