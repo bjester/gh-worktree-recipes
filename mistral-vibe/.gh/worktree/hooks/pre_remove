@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 WORKTREE_NAME="$1"
 SESSION_DIR="$HOME/.vibe/logs/session"
