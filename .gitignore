@@ -59,6 +59,7 @@ venv.bak/
 
 # IDEs
 /.idea/
+/*.iml
 /.vscode/
 .cursorignore
 .cursorindexingignore

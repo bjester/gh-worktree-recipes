@@ -1,5 +1,5 @@
-# gh-worktree-recipes
-My hooks and templates for [`gh-worktree`](https://github.com/bjester/gh-worktree) CLI tool.
+# treefort-recipes
+My hooks and templates for [`treefort`](https://github.com/bjester/treefort) CLI tool.
 
 ## Recipes
 - [Direnv Recipe](direnv)
